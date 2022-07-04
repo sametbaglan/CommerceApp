@@ -1,0 +1,44 @@
+﻿@model AllLayoutModel
+@{
+    ViewData["Title"] = "SubCategoria";
+    Layout = Model.Layout;
+}
+
+
+
+<section class="bg0 p-t-23 p-b-140">
+    <div class="container">
+        <header class="page-header">
+            <input type="text" id="txtsearch" placeholder="Müşteri Giriniz" />
+        </header>
+        <hr />
+        <table class="table table-bordered">
+            <tr>
+                <td>Kategori</td>
+                <td>Üst Kategori</td>
+                <td></td>
+            </tr>
+            @foreach (var customer in Model.Categories)
+            {
+                <tr class="Search">
+                    <td>@customer.name</td>
+
+                    <td>@Functions.parentidcategoryname(customer.parentId)</td>
+
+
+                    <td style="text-align:right">
+                        <a href="/Categoria/SubCategoriaAdd/@customer.id" name="id" class="btn-sm btn-success" style="margin-right:6px !important;" title="Fişler">Alt Kategori Ekle</a>
+                        <a href="/Categoria/SubCategoria/@customer.id" name="id" class="btn-sm btn-secondory" style="margin-right:6px !important;" title="Fişler">Alt Kategorileri</a>
+                        @if (Functions.SubCategoriaControll(@customer.id) == false)
+                        {
+                            <a href="/Product/Add/@customer.id" name="id" class="btn-warning btn-sm" style="margin-right:6px !important;" title="Edit">Ürün Ekle</a>
+                        }
+                        @*     <a href="/Check/CheckGive/@CommondMethod.ConvertToEncrypt(@customer.id.ToString())" name="id" class="btn-danger btn-sm" style="margin-right:6px !important;" title="Çek">Çek Ver</a>
+                    <a href="/Check/CheckOfCustomer/@CommondMethod.ConvertToEncrypt(@customer.id.ToString())" name="id" class="btn-Secondary btn-sm" style="margin-right:6px !important;" title="Çek">Çekler</a>*@
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+
+</section>

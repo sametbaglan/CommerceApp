@@ -1,0 +1,31 @@
+﻿@model AllLayoutModel
+@{
+    ViewData["Title"] = "VaryantValues";
+    Layout = Model.Layout;
+}
+
+
+<section class="bg0 p-t-23 p-b-140">
+    <div class="container">
+        <header class="page-header">
+            <input type="text" id="txtsearch" placeholder="varyant Giriniz" />
+        </header>
+        <hr />
+        <table class="table table-bordered">
+            <tr>
+                <td>Varyantlar</td>
+                <td></td>
+            </tr>
+            @foreach (var customer in Model.ListattributeValues)
+            {
+                <tr class="Search">
+                    <td>@customer.name</td>
+                    <td></td>
+                </tr>
+            }
+        </table>
+    </div>
+
+</section>
+
+

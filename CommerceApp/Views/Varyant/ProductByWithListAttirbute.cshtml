@@ -1,0 +1,80 @@
+﻿@model AllLayoutModel
+@{
+    ViewData["Title"] = "ProductByWithListAttirbute";
+    Layout = Model.Layout;
+}
+
+<head>
+    <style>
+        #quantity {
+            display: none
+        }
+    </style>
+</head>
+
+<section class="bg0 p-t-23 p-b-140">
+    <div class="container">
+        <hr />
+        <input type="text" id="quantity" name="quan" value="@ViewBag.productid" />
+        <table id="dtBasicExample3" class="table table-striped table-bordered"
+               cellspacing="0" style="text-align:center">
+            <thead>
+                <tr class="odd" id="tablodoldurss">
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="odd" id="tablodoldaltt"></tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/snippets/javascript.min.js"></script>
+<script src="/gaseltema/vendor/jquery/jquery-3.2.1.min.js"> </script>
+
+<script>
+    var productid;
+    productid = document.getElementById('quantity').value;
+console.log(productid);
+
+
+
+    var requestData = { id: productid };
+
+    $(document).ready(function() {
+        $('#tablodoldaltt').show();
+        $('#tablodoldurss').show();
+
+        $.ajax({
+            type: 'POST',
+            url: '/Varyant/GetVariantByProdcutid',
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            data: requestData,
+            success: function(data) {
+                var Adth = '<th>#</th>';
+                var inputth = '<th>#</th>';
+                debugger;
+                for (var i = 0; i < data.length; i++) {
+                    Adth += '<th style="min-width:73px;">' + data[i]["name"] + '</th>';
+                    var totalvalue = 0;
+                    var totalprice = 0;
+                    inputth += '<th >';
+                    for (var j = 0; j < data[i]["factoryQuantities"].length; j++) {
+                        totalprice += data[i]["factoryQuantities"][j]["totalprice"]
+                        totalvalue += data[i]["factoryQuantities"][j]["kg"]
+                        inputth += '<input style="text-align:center"  value="' + data[i]["factoryQuantities"][j]["kg"] + '"  name="' + data[j] + '_' + j + '" type="text" disabled="disabled"  form-control calcdata" >';
+                        console.log([j]["kg"]);
+                    }
+                    if (data[i]["factoryQuantities"].length > 1) {
+                        inputth += '<span>Toplam : </span><input style="text-align:center"  value="' + totalvalue + '"  name="' + data[j] + '_' + j + '" type="text" disabled="disabled"  form-control calcdata" >';
+                    }
+                    inputth += '</th>';
+                    $("#tablodoldurss").html(Adth);
+                    $("#tablodoldaltt").html(inputth);
+                    document.getElementById('totalprice').value = totalprice;
+                }
+            }
+        });
+    });
+</script>

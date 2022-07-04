@@ -1,0 +1,171 @@
+﻿@model AllLayoutModel
+@{
+    ViewData["Title"] = "Add";
+    Layout = Model.Layout;
+}
+<head>
+    <style>
+        .my-custom-scrollbar {
+            position: relative;
+            height: 332px;
+            overflow: auto;
+        }
+
+        .table-wrapper-scroll-y {
+            display: block;
+        }
+    </style>
+</head>
+
+<section class="bg0 p-t-23 p-b-140">
+    <div class="container">
+        <hr />
+        <form asp-controller="Product" asp-action="Add" method="post">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="control-label"> Ürün Adı</label>
+                        <input id="productName" class="form-control" type="text" asp-for="product.name" required />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label"> Model Kodu</label>
+                        <input id="productName" class="form-control" type="text" asp-for="product.modelcode" required />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label"> Marka</label>
+                        <input id="productName" class="form-control" type="text" asp-for="product.brand" required />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label"> Fiyat</label>
+                        <input id="productName" class="form-control" type="text" asp-for="product.price" required />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label"> İndirimli Fiyat</label>
+                        <input id="productName" class="form-control" type="text" asp-for="product.reducedprice" required />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label"> Ürün Açıklaması</label>
+                        <input id="productName" class="form-control" type="text" asp-for="product.descriptions" required />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label"> Stok</label>
+                        <input class="form-control" type="number" asp-for="product.stock" id="stockid" required />
+                    </div>
+
+                    <div class="form-group">
+
+                        <input id="btnAdd" class="btn btn-primary para" type="button" value="Yeni Ekle" />
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-10 offset-md-2">
+                            <button type="submit" id="btn1" class=" center-block btn btn-primary">Ekle</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="control-label"> MATERYAL *</label>
+                        @Html.DropDownListFor(x=>x.atttibutevaluesViewModel.materyalid,(List<SelectListItem>)ViewBag.listmateryal,"Seç",new{@class="form-control"})
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label"> BEDEN (OPSIYONEL)</label>
+                        @Html.DropDownListFor(x=>x.atttibutevaluesViewModel.bedenid,(List<SelectListItem>)ViewBag.listbeden,"Seç",new{@class="form-control"})
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label"> ÇARŞAF TÜRÜ *</label>
+                        @Html.DropDownListFor(x=>x.atttibutevaluesViewModel.carsaftype,(List<SelectListItem>)ViewBag.listcarsaf,"Seç",new{@class="form-control"})
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="control-label"> RENK *</label>
+                        @Html.DropDownListFor(x=>x.category.id,(List<SelectListItem>)ViewBag.listrenk,"Seç",new{@class="form-control deneme",@id="renkid",@onChange="update(this)"})
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label"> BOYUT/EBAT *</label>
+                        @Html.DropDownListFor(x=>x.category.id,(List<SelectListItem>)ViewBag.listboyutebat,"Seç",new{@class="form-control deneme",@id="boyutid"})
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div class="row pt-3">
+                <div class="col-md-12 col-sm-12 col-12 p-2">
+                    <table id="tblData" class="table table-bordered table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Renk</th>
+                                <th>Stok</th>
+                                <th>Boyut/Ebat</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+
+
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/snippets/javascript.min.js"></script>
+<script src="/gaseltema/vendor/jquery/jquery-3.2.1.min.js"> </script>
+
+<script>
+    var emptyrow = "<tr><td colspan= '5' class='text-center'> No Value</td></tr>";
+    var stock;
+    var dynamictr;
+    var val;
+    var boyuti;
+    $(function update() {
+        $("#renkid").change(function() {
+            var selectedtext = $(this).find("option:selected").text();
+            var selectedvalue = $(this).val();
+            //alert("Selected Text: " + selectedtext + " Value: " + selectedvalue);
+            val = selectedtext + ',' + selectedvalue;
+        });
+    });
+
+    $(function updateboyut() {
+        $("#boyutid").change(function() {
+            var selectedtext = $(this).find("option:selected").text();
+            var selectedvalue = $(this).val();
+            //alert("Selected Text: " + selectedtext + " Value: " + selectedvalue);
+            boyuti = selectedtext;
+        });
+    });
+
+
+
+
+    $(document).ready(function() {
+        $('#tblData tbody').append(emptyrow);
+        $("#btnAdd").click(function() {
+            stock = document.getElementById("stockid").value;
+            console.log(stock);
+            if ($("#tblData tbody").children().children().length == 1) {
+                $("#tblData tbody").html("");
+            }
+            var srno = $("#tblData tbody").children().length + 1;
+
+            dynamictr = "<tr><td>" + srno + "</td><td>" + '<input name="color" value="' + val + '" type="text" form-control">'+"</td><td>" + '<input name="stok" value="0" type="text" form-control">' + "</td><td>" + '<input name="ebat" value="' + boyuti + '" type="text" form-control">' + "</td><td> <button class='btn btn-danger btn-sm'> Sil </button> </td></tr>";
+            $("#tblData tbody").append(dynamictr);
+            document.getElementById("stockid").value = "";
+            $(".btn-sm").click(function() {
+                $(this).parent().parent().remove();
+                if ($("#tblData tbody").children().children().length == 0) {
+                    $("#tblData tbody").append(emptyrow);
+                }
+            });
+        });
+    });
+
+
+
+</script>
+
